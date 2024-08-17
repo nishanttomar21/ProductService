@@ -13,14 +13,9 @@ package org.example.fakeStore.services;
 import org.example.fakeStore.dtos.fakestore.FakeStoreCreateProductRequestDto;
 import org.example.fakeStore.dtos.fakestore.FakeStoreGetProductResponseDto;
 import org.example.fakeStore.models.Product;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -30,7 +25,7 @@ import java.util.stream.Stream;
 // @Primary
 public class ProductServiceFakeStoreImpl implements ProductService {
     private final WebClient webClient;
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     // Error (IMPORTANT): Could not autowire. No beans of 'RestTemplate' or 'WebClient' types found, hence manually create a bean of RestTemplate in the configuration class
     public ProductServiceFakeStoreImpl(WebClient.Builder webClientBuilder, RestTemplate restTemplate) {
