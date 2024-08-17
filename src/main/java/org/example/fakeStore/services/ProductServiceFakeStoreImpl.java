@@ -54,22 +54,21 @@ public class ProductServiceFakeStoreImpl implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        throw new RuntimeException();
          // [Important] List<FakeStoreCreateProductResponseDto> will not work due to Type Erasure in Java (Generics are removed and replaced with Object during compilation) but Array works here
         // 3rd Party API call (using DTO)
-//        FakeStoreGetProductResponseDto[] response = restTemplate.getForObject(
-//                "https://fakestoreapi.com/products",
-//                 FakeStoreGetProductResponseDto[].class // Response DTO type to be converted to (Used array here due to type closure)
-//                // List.class // Error: Cannot convert from List to Class<T>
-//        );
-//
-//        // [Response] DTO --> Model (Data conversion)
-//        List<Product> products = Stream.of(response)
-//                                        .map(FakeStoreGetProductResponseDto::toProduct)
-//                                        .toList();
-//
-//        // Return Model
-//        return products;
+        FakeStoreGetProductResponseDto[] response = restTemplate.getForObject(
+                "https://fakestoreapi.com/products",
+                 FakeStoreGetProductResponseDto[].class // Response DTO type to be converted to (Used array here due to type closure)
+                // List.class // Error: Cannot convert from List to Class<T>
+        );
+
+        // [Response] DTO --> Model (Data conversion)
+        List<Product> products = Stream.of(response)
+                                        .map(FakeStoreGetProductResponseDto::toProduct)
+                                        .toList();
+
+        // Return Model
+        return products;
     }
 
     @Override

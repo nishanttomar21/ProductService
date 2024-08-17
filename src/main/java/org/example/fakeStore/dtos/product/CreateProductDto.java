@@ -4,6 +4,7 @@ package org.example.fakeStore.dtos.product;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.fakeStore.models.Category;
 import org.example.fakeStore.models.Product;
 
 @Getter
@@ -14,7 +15,7 @@ public class CreateProductDto {
     private String description;
     private double price;
     private String imageUrl;
-    private String category;
+    private String categoryName;
 
     // Convert the Product model to a DTO
     public static CreateProductDto fromProduct(Product product) {
@@ -25,7 +26,7 @@ public class CreateProductDto {
         createProductDto.setDescription(product.getDescription());
         createProductDto.setPrice(product.getPrice());
         createProductDto.setImageUrl(product.getImageUrl());
-        createProductDto.setCategory(product.getCategoryName());
+        //createProductDto.setCategoryName(product.getCategory().getName());
 
         return createProductDto;
     }
@@ -37,7 +38,10 @@ public class CreateProductDto {
         product.setDescription(this.description);
         product.setPrice(this.price);
         product.setImageUrl(this.imageUrl);
-        product.setCategoryName(category);
+
+        Category category = new Category();
+        category.setName(this.categoryName);
+        product.setCategory(category);
 
         return product;
     }

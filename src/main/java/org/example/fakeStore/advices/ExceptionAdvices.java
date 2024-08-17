@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 @ControllerAdvice
-@RestController
+@RestController   // Use this annotation here otherwise you will get Error - "Whitelabel Error" in the browser when you hit a URL that throws an exception (This application has no explicit mapping for /error, so you are seeing this as a fallback)
 public class ExceptionAdvices {
 
     @ExceptionHandler(RuntimeException.class)

@@ -19,6 +19,7 @@ package org.example.fakeStore.dtos.product;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.fakeStore.models.Category;
 import org.example.fakeStore.models.Product;
 
 @Getter
@@ -38,7 +39,10 @@ public class CreateProductRequestDto {
         product.setDescription(this.description);
         product.setPrice(this.price);
         product.setImageUrl(this.imageUrl);
-        product.setCategoryName(this.category);
+
+        Category category = new Category();
+        category.setName(this.category);
+        product.setCategory(category);
 
         return product;
     }

@@ -22,7 +22,7 @@ public class FakeStoreCreateProductRequestDto {
         dto.price = product.getPrice();
         dto.image = product.getImageUrl();
         dto.description = product.getDescription();
-        dto.category = product.getCategoryName();
+        dto.category = product.getCategory().getName();
 
         return dto;
     }

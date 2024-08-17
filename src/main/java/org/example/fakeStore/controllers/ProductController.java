@@ -13,6 +13,7 @@
  RequestBody - Used to extract the values from the request body (JSON/XML)
  ApplicationContext - The ApplicationContext is the central interface within a Spring application for providing configuration information to the application. It is responsible for instantiating, configuring, and assembling the beans.
  Reflection - Reflection is a feature in Java that allows you to inspect and manipulate classes, methods, fields, and other components of a Java program at runtime. It provides a way to access and modify the properties and behavior of objects dynamically.
+ TomcatServer - Tomcat is an open-source web server and servlet container developed by the Apache Software Foundation. It is used to serve Java-based web applications.
 
  Multiple controllers can call/use 1 service, hence use models/exact values inside (not dtos) and dtos outside the application.
  1 controller can use multiple services, but it's not recommended due to violation of SRP principle
@@ -44,7 +45,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
     private ProductServiceDBImpl productServiceDBImpl;
 
     // Solution 1 - Constructor Injection
