@@ -13,6 +13,8 @@ package org.example.fakeStore.repositories;
 
 import org.example.fakeStore.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,4 +38,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Override
     Optional<Product> findById(Long id);
+
+    List<Product> findAllByCategory_Subcategories_NameEquals(String subcategoryName);     // JPA Query Methods(Attribute of attribute)  - find all products by subcategory name
+
+    // JPQL - Java Persistence Query Language
+    // select * from products p where p.price = ?
+    @Query("SELECT p FROM Product p WHERE p.price > :productPrice")   // productPrice is a variable (named parameter) that will be replaced by the value passed in the method
+    List<Product> JPQLFunction1(@Param("productPrice") Double productPrice);
+
+    @Query("SELECT p " +
+            "FROM Product p " +
+            "WHERE p.category.subcategory.name = :subcategoryName")  // subcategoryName is a variable (named parameter) that will be replaced by the value passed in the method
+    List<Product> JPQLFunction2(@Param("subcategoryName") String subcategoryName);
 }

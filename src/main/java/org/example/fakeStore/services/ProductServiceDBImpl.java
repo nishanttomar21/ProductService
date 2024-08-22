@@ -38,6 +38,9 @@ public class ProductServiceDBImpl implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
+        // List<Product> products = productRepository.findAllByCategory_Subcategories_NameEquals("Nishant");   // JPA query method (attribute of/inside Attribute call), Get all products by subcategory name
+        // List<Product> products = productRepository.JPQLFunction1(100.0);    // JPQL query method, Get all products with price greater than 100
+        // List<Product> products = productRepository.JPQLFunction2("Nishant");    // JPQL query method, Get all products with subcategory name "Nishant"
         return productRepository.findAll();
     }
 
