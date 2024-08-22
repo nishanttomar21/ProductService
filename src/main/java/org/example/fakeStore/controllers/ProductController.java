@@ -31,6 +31,7 @@
 package org.example.fakeStore.controllers;
 
 import org.example.fakeStore.dtos.product.*;
+import org.example.fakeStore.exception.ProductNotFoundException;
 import org.example.fakeStore.models.Product;
 import org.example.fakeStore.services.ProductService;
 import org.example.fakeStore.services.ProductServiceDBImpl;
@@ -45,10 +46,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private final ProductService productService;
+    private final ProductService productService;    // Dependency Inversion
     private ProductServiceDBImpl productServiceDBImpl;
 
-    // Solution 1 - Constructor Injection
+    // Solution 1 - Constructor Injection (Dependency Injection)
     /* public ProductController(@Qualifier("fakeStoreProductService") ProductService productService) {
         this.productService = productService;
     }*/
@@ -65,7 +66,7 @@ public class ProductController {
     }
 
     // HTTP Requests
-    @PostMapping("/")
+    @PostMapping("")
     public CreateProductResponseDto createProduct(@RequestBody CreateProductRequestDto createProductRequestDto) {
         // DTO --> Model (Data conversion)
         Product productRequest = createProductRequestDto.toProduct();
@@ -81,7 +82,7 @@ public class ProductController {
         return response;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public GetAllProductsResponseDto getAllProducts() {
         List<GetProductDto> responseDto = new ArrayList<>();
         GetAllProductsResponseDto response = new GetAllProductsResponseDto();
@@ -101,7 +102,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public PatchProductResponseDto updateProduct(@PathVariable("id") Long productId, @RequestBody CreateProductDto productDto) {
+    public PatchProductResponseDto updateProduct(@PathVariable("id") Long productId, @RequestBody CreateProductDto productDto) throws ProductNotFoundException {
         // DTO --> Model (Data conversion)
         Product productRequest = productDto.toProduct();
 
@@ -124,6 +125,9 @@ public class ProductController {
     public String deleteProduct(@PathVariable("id") String id) {
         return "Product deleted: " + id;
     }
+
+    @PutMapping("")
+    public void replaceProduct() {}
 
     @RequestMapping(name = "NISHANT", value = "/")      // Custom HTTP Request
     public String nishantMethod() {

@@ -29,7 +29,7 @@ public class CreateProductRequestDto {
     private String description;
     private double price;
     private String imageUrl;
-    private String category;
+    private String categoryName;
 
     // Convert the DTO to a Product model
     public Product toProduct() {
@@ -41,7 +41,7 @@ public class CreateProductRequestDto {
         product.setImageUrl(this.imageUrl);
 
         Category category = new Category();
-        category.setName(this.category);
+        category.setName(this.categoryName);
         product.setCategory(category);
 
         return product;

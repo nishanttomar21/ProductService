@@ -59,7 +59,8 @@ public class ProductServiceFakeStoreImpl implements ProductService {
         FakeStoreGetProductResponseDto[] response = restTemplate.getForObject(
                 "https://fakestoreapi.com/products",
                  FakeStoreGetProductResponseDto[].class // Response DTO type to be converted to (Used array here due to type closure)
-                // List.class // Error: Cannot convert from List to Class<T>
+                /** Error: Cannot convert from List to Class<T> */
+                // List.class
         );
 
         // [Response] DTO --> Model (Data conversion)
@@ -73,10 +74,10 @@ public class ProductServiceFakeStoreImpl implements ProductService {
 
     @Override
     public Product partialUpdateProduct(Long productId, Product product) {
-        // Not Supported
+        /** Error: PATCH method not supported by RestTemplate */
 //        FakeStoreGetProductResponseDto request = restTemplate.exchange(
 //                "https://fakestoreapi.com/products/" + productId,
-//                HttpMethod.PATCH, // Error: PATCH method not supported by RestTemplate
+//                HttpMethod.PATCH,
 //                FakeStoreCreateProductRequestDto.fromProduct(product),
 //                FakeStoreGetProductResponseDto.class
 //        );
