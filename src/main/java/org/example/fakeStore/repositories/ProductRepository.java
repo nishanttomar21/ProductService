@@ -39,7 +39,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Override
     Optional<Product> findById(Long id);
 
-    List<Product> findAllByCategory_Subcategories_NameEquals(String subcategoryName);     // JPA Query Methods(Attribute of attribute)  - find all products by subcategory name
+    List<Product> findAllByCategory_Subcategory_NameEquals(String subcategoryName);     // JPA Query Methods(attribute of attribute)  - find all products by subcategory name
 
     // JPQL - Java Persistence Query Language
     // select * from products p where p.price = ?

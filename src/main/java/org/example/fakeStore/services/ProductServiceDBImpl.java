@@ -1,4 +1,5 @@
 // List.of() is a static factory method that creates an immutable List instance with the specified elements. It was introduced in Java 9. Before Java 9, you could use Arrays.asList() to create a List instance with the specified elements. However, the list returned by Arrays.asList() is mutable, so you need to wrap it with new ArrayList<>(Arrays.asList()) to make it immutable.
+// It is recommended not to use cascade in your entities/tables. Instead, use the service layer to manage the cascading operations as this will be much easy to debug the code, more verbose. This will give you more control over the cascading operations and prevent unwanted cascading operations.
 
 package org.example.fakeStore.services;
 
@@ -88,8 +89,13 @@ public class ProductServiceDBImpl implements ProductService {
 
          categoryToBeSaved = category.orElseGet(product::getCategory); // Above if-else block can be replaced with this line for function coding style
          */
-        if (category.isEmpty())   // Better inline implementation of if-else block for functional coding style in comments above
-            categoryToBeSaved = categoryRepository.save(product.getCategory()); // Save the category in the database
+        if (category.isEmpty()) {   // Better implementation of if-else block for function coding style in comments above
+            // Category newCategory = new Category();   // No need to save the new category in the database if cascade is used (It will be saved automatically when the product is saved by JPA)
+            // categoryToBeSaved.setName(categoryName);
+
+            Category newCategory = categoryRepository.save(product.getCategory()); // Save the category in the database
+            categoryToBeSaved = newCategory;
+        }
         else
             categoryToBeSaved = category.get();
 
