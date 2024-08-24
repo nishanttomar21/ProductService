@@ -75,7 +75,17 @@
 			<artifactId>mysql-connector-j</artifactId>
 			<version>9.0.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.flywaydb</groupId>	<!-- To add dependency for Flyway (Schema Versioning Library, works for MySQL and PostgreSQL) -->
+			<artifactId>flyway-core</artifactId>
+			<version>10.17.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>	<!-- To add dependency for Flyway MySQL -->
+			<artifactId>flyway-mysql</artifactId>
+			<version>10.17.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -35,7 +35,7 @@ import java.util.List;
 @Setter
 @Entity
 public class Category extends BaseModel {
-    @Column(nullable = false, unique = true)  // Column annotation is used to specify the column details of the entity. In this case, we are specifying that the name column is not nullable (validation, cannot be empty) and unique.
+    @Column(nullable = false, unique = true, name = "category_name")  // Column annotation is used to specify the column details of the entity. In this case, we are specifying that the name column is not nullable (validation, cannot be empty) and unique. We are also specifying the name of the column in the database as category_name.
     private String name;
 
     @Basic(fetch = FetchType.LAZY)
@@ -53,4 +53,6 @@ public class Category extends BaseModel {
 
     @OneToOne(cascade = {})
     private Subcategory subcategory;
+
+    private int countOfProducts;
 }
