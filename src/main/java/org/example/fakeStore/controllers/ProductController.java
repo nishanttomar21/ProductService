@@ -14,6 +14,12 @@
  ApplicationContext - The ApplicationContext is the central interface within a Spring application for providing configuration information to the application. It is responsible for instantiating, configuring, and assembling the beans.
  Reflection - Reflection is a feature in Java that allows you to inspect and manipulate classes, methods, fields, and other components of a Java program at runtime. It provides a way to access and modify the properties and behavior of objects dynamically.
  TomcatServer - Tomcat is an open-source web server and servlet container developed by the Apache Software Foundation. It is used to serve Java-based web applications.
+ JsonIgnore - The @JsonIgnore annotation in Jackson is used to ignore a property or field during serialization and deserialization. It tells the Jackson library to exclude the annotated property from the JSON output.
+ JsonSerialize - The @JsonSerialize annotation in Jackson is used to specify a custom serializer for a property or field during serialization. It allows you to define how the property should be serialized to JSON.
+ JsonDeserialize - The @JsonDeserialize annotation in Jackson is used to specify a custom deserializer for a property or field during deserialization. It allows you to define how the property should be deserialized from JSON.
+ Jackson - Jackson is a popular JSON processing library for Java. It provides a set of high-performance tools for parsing, generating, and manipulating JSON data. Jackson is widely used in Java applications for handling JSON data.
+ Serialization - The process of converting an object into a format that can be stored or transmitted. Common formats include JSON, XML, and binary data.
+ Deserialization - The reverse process of serialization. It involves converting the serialized data back into an object that the program can work with.
 
  Multiple controllers can call/use 1 service, hence use models/exact values inside (not dtos) and dtos outside the application.
  1 controller can use multiple services, but it's not recommended due to violation of SRP principle

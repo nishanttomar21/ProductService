@@ -118,8 +118,3 @@ Example Workflow:
     Service Returns Result: The service might return a GetDto or another DTO that the controller will use to construct the HTTP response.
 
 **/
-
-package org.example.fakeStore;
-
-public class CodingConventions {
-}
