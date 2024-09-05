@@ -32,7 +32,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>	<!-- Don't need to provide the version for spring-boot-starter-{name} as spring-boot-starter-parent is already mentioned at the top -->
 		</dependency>
 
 		<dependency>
