@@ -6,6 +6,12 @@
  OpenFeign - (Helps call 3rd Party APIs, easy implementation) A declarative REST client that makes writing web service clients easier in Spring Boot applications. It's easier to implement than RestTemplate and provides a more readable and maintainable code.
  Object of RestTemplate is created using new RestTemplate() whereas Object of OpenFeign is created using @FeignClient annotation. Object of RestTemplate is not autowired whereas Object of OpenFeign is autowired
  SpringBoot does not know about the RestTemplate as it's not present as a spring bean and hence is not able to autowire it. To fix this, we need to create a bean of RestTemplate in the configuration class.
+ WebClient is a reactive web client that supports both blocking and non-blocking I/O. It provides a more modern and efficient way to interact with web services using asynchronous programming.
+ I/O operations (Input/Output operations) are processes that involve transferring data to or from a computer system. These operations typically include:
+    1. Reading from or writing to files on disk
+    2. Sending or receiving data over a network (In the context of web services and the WebClient mentioned in the code comment, I/O operations primarily refer to network communications, such as making HTTP requests to APIs and receiving responses.)
+    3. Interacting with external devices (e.g., printers, sensors)
+    4. Reading user input or displaying output on a screen
 */
 
 package org.example.productService.services;

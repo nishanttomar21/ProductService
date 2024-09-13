@@ -45,6 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,7 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;    // Dependency Inversion
     private ProductServiceDBImpl productServiceDBImpl;
+    private final RestTemplate restTemplate;
 
     // Solution 1 - Constructor Injection (Dependency Injection)
     /* public ProductController(@Qualifier("fakeStoreProductService") ProductService productService) {
@@ -61,8 +63,9 @@ public class ProductController {
     }*/
 
     // Solution 2 - [Better Implementation] Constructor Injection using application.properties configuration
-    public ProductController(@Value("${productService}") String productServiceBeanName, ApplicationContext context) {
+    public ProductController(@Value("${productService}") String productServiceBeanName, ApplicationContext context, RestTemplate restTemplate) {
         this.productService = (ProductService) context.getBean(productServiceBeanName);
+        this.restTemplate = restTemplate;
     }
 
     // Setter/Method Injection
@@ -73,7 +76,21 @@ public class ProductController {
 
     // HTTP Requests
     @PostMapping("")
-    public CreateProductResponseDto createProduct(@RequestBody CreateProductRequestDto createProductRequestDto) {
+    public CreateProductResponseDto createProduct(@RequestHeader("Authorization") String token,  @RequestBody CreateProductRequestDto createProductRequestDto) {
+        // Authenticate user first using JWT tokens
+        // The code knows about the "userService" through service discovery, typically implemented using a service registry like Eureka in a microservices architecture.
+        // When you use "http://userService" in the URL, you're not directly accessing an IP address or hostname. Instead, you're using the logical service name registered with the service registry. The client-side load balancer (like Ribbon, which is often used with Eureka) resolves this service name to an actual instance of the userService.
+        // This approach allows for dynamic service discovery and load balancing without hardcoding server addresses, making the system more flexible and scalable.
+        boolean isAuthenticated = restTemplate.getForObject(
+                "http://userService/auth/validate?token=" + token,      // Service name - userService
+                Boolean.class
+        );
+
+        // Check if user is authenticated
+        if (!isAuthenticated) {
+            return null;
+        }
+
         // DTO --> Model (Data conversion)
         Product productRequest = createProductRequestDto.toProduct();
 
