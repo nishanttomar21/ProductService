@@ -21,6 +21,8 @@
  Serialization - The process of converting an object into a format that can be stored or transmitted. Common formats include JSON, XML, and binary data.
  Deserialization - The reverse process of serialization. It involves converting the serialized data back into an object that the program can work with.
 
+ @Controller is used for returning a view (HTML or template), while @RestController is used for returning JSON or XML directly (RESTful services)
+
  Multiple controllers can call/use 1 service, hence use models/exact values inside (not dtos) and dtos outside the application.
  1 controller can use multiple services, but it's not recommended due to violation of SRP principle
 
@@ -51,7 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/products/")
 public class ProductController {
     private final ProductService productService;    // Dependency Inversion
     private ProductServiceDBImpl productServiceDBImpl;
@@ -107,6 +109,7 @@ public class ProductController {
 
     @GetMapping("")
     public GetAllProductsResponseDto getAllProducts() {
+        System.out.println("**********************");
         List<GetProductDto> responseDto = new ArrayList<>();
         GetAllProductsResponseDto response = new GetAllProductsResponseDto();
 
