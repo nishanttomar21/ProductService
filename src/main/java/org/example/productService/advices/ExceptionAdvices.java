@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @ControllerAdvice
 @RestController   /** Use this annotation here otherwise you will get Error - "Whitelabel Error" in the browser when you hit a URL with method that is not defined in your server which throws an exception (This application has no explicit mapping for /error, so you are seeing this as a fallback) */
+//@RestControllerAdvice // Use this and remove the above 2 annotations when you want to handle exceptions globally
 public class ExceptionAdvices {
 
     @ExceptionHandler(RuntimeException.class)

@@ -44,8 +44,16 @@ import org.example.productService.dtos.fakestore.FakeStoreCreateProductRequestDt
 import org.example.productService.dtos.fakestore.FakeStoreGetProductResponseDto;
 import org.example.productService.exception.ProductNotFoundException;
 import org.example.productService.models.Product;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -146,5 +154,37 @@ public class ProductServiceFakeStoreImpl implements ProductService {
         }
 
         return fakeStoreProduct.toProduct();
+    }
+
+    // For PUT requests, you should use the put() method of RestTemplate. If you need to get a response object from a PUT request, you can use the exchange() method with HttpMethod.PUT.
+    public Product replaceProduct(Long id, Product product) {
+        FakeStoreCreateProductRequestDto fakeStoreProductDto = FakeStoreCreateProductRequestDto.fromProduct(product);
+
+        // Implementation 1
+        ResponseEntity<FakeStoreGetProductResponseDto> fakeStoreProductDtoResponse = restTemplate.exchange(
+                "https://fakestoreapi.com/products/{id}",
+                HttpMethod.PUT,
+                new HttpEntity<>(fakeStoreProductDto),
+                FakeStoreGetProductResponseDto.class,
+                id  // This will replace {id} in the URL
+        );
+
+        // Implementation 2
+//        FakeStoreGetProductResponseDto fakeStoreProductDtoResponse =
+//                requestForEntity("https://fakestoreapi.com/products/{id}",HttpMethod.PUT, fakeStoreProductDto, FakeStoreGetProductResponseDto.class,id).getBody();
+
+
+        return fakeStoreProductDtoResponse.getBody().toProduct();
+    }
+
+    @Autowired
+    private RestTemplateBuilder restTemplateBuilder;
+
+    // Custom method to make any HTTP requests
+    private <T> ResponseEntity<T> requestForEntity(String url, HttpMethod httpMethod, @Nullable Object request, Class<T> responseType, Object... uriVariables) throws RestClientException {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(request, responseType);
+        ResponseExtractor<ResponseEntity<T>> responseExtractor = restTemplate.responseEntityExtractor(responseType);
+        return restTemplate.execute(url, httpMethod, requestCallback, responseExtractor, uriVariables);
     }
 }

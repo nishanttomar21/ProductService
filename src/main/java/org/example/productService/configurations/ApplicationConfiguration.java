@@ -5,7 +5,6 @@
 
 package org.example.productService.configurations;
 
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -15,8 +14,7 @@ import org.springframework.web.client.RestTemplate;
 public class ApplicationConfiguration {
 
     @Bean
-    @LoadBalanced
-    // Comment this line if you want to disable load balancing for the RestTemplate and Fakestore API calls will only work if you comment this
+    //@LoadBalanced // Comment this line if you want to disable load balancing for the RestTemplate and Fakestore API calls will only work if you comment this
     public RestTemplate createRestTemplate() {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
 

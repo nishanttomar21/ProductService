@@ -106,4 +106,9 @@ public class ProductServiceDBImpl implements ProductService {
     public Product getProductById(Long productId) throws ProductNotFoundException {
         return productRepository.findByIdIs(productId);
     }
+
+    @Override
+    public Product replaceProduct(Long id, Product product) {
+        return null;
+    }
 }

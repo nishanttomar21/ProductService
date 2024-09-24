@@ -166,13 +166,17 @@ public class ProductController {
         }
     }
 
+    @PutMapping("/{id}")
+    public GetProductDto replaceProduct(@PathVariable("id") Long id, @RequestBody CreateProductDto productDto) {
+        Product product = productService.replaceProduct(id, productDto.toProduct());
+
+        return GetProductDto.fromProduct(product);
+    }
+
     @DeleteMapping("/{id}")
     public String deleteProduct(@PathVariable("id") String id) {
         return "Product deleted: " + id;
     }
-
-    @PutMapping("")
-    public void replaceProduct() {}
 
     @RequestMapping(name = "NISHANT", value = "/")      // Custom HTTP Request
     public String nishantMethod() {
