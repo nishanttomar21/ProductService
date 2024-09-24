@@ -46,6 +46,8 @@ import org.example.productService.services.ProductServiceDBImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -83,15 +85,15 @@ public class ProductController {
         // The code knows about the "userService" through service discovery, typically implemented using a service registry like Eureka in a microservices architecture.
         // When you use "http://userService" in the URL, you're not directly accessing an IP address or hostname. Instead, you're using the logical service name registered with the service registry. The client-side load balancer (like Ribbon, which is often used with Eureka) resolves this service name to an actual instance of the userService.
         // This approach allows for dynamic service discovery and load balancing without hardcoding server addresses, making the system more flexible and scalable.
-        boolean isAuthenticated = restTemplate.getForObject(
-                "http://userService/auth/validate?token=" + token,      // Service name - userService
-                Boolean.class
-        );
+//        boolean isAuthenticated = restTemplate.getForObject(
+//                "http://userService/auth/validate?token=" + token,      // Service name - userService
+//                Boolean.class
+//        );
 
         // Check if user is authenticated
-        if (!isAuthenticated) {
-            return null;
-        }
+//        if (!isAuthenticated) {
+//            return null;
+//        }
 
         // DTO --> Model (Data conversion)
         Product productRequest = createProductRequestDto.toProduct();
@@ -109,7 +111,6 @@ public class ProductController {
 
     @GetMapping("")
     public GetAllProductsResponseDto getAllProducts() {
-        System.out.println("**********************");
         List<GetProductDto> responseDto = new ArrayList<>();
         GetAllProductsResponseDto response = new GetAllProductsResponseDto();
 
@@ -143,8 +144,26 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public String getSingleProduct(@PathVariable("id") Long id) {
-        return "Product retrieved: " + id;
+    public ResponseEntity<GetProductDto> getSingleProduct(@PathVariable("id") Long productId) {
+        try {
+            if (productId < 0)
+                throw new RuntimeException("Product not found");
+            else if(productId == 0)
+                throw new RuntimeException("Something very bad");
+
+            Product product = productService.getProductById(productId);
+
+            if (product == null)
+                return null;
+
+            return new ResponseEntity<>(GetProductDto.fromProduct(product), HttpStatus.OK);
+        }
+        catch (RuntimeException exception) {
+            //return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+            throw exception;
+        } catch (ProductNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -159,4 +178,21 @@ public class ProductController {
     public String nishantMethod() {
         return "Nishant Method";
     }
+
+    //    @ExceptionHandler(ProductNotFoundException.class)
+//    public ResponseEntity<ErrorDto> handleProductNotFoundException(ProductNotFoundException exception) {
+//
+//        ErrorDto errorDto = new ErrorDto();
+//        errorDto.setMessage(exception.getMessage());
+//
+//        return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+////        return null;
+//    }
+
+    // Limited to only the exceptions thrown from this controller
+    // Controller Advices: Global
+
+    // if this controller ever ends up throwing ProductNotFoundException.class
+    // for any reason, don't throw that exception as is.
+    // Instead call this method and return what this method is returning
 }

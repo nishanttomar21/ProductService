@@ -12,13 +12,39 @@
     2. Sending or receiving data over a network (In the context of web services and the WebClient mentioned in the code comment, I/O operations primarily refer to network communications, such as making HTTP requests to APIs and receiving responses.)
     3. Interacting with external devices (e.g., printers, sensors)
     4. Reading user input or displaying output on a screen
+ ParameterizedTypeReference [Important]:
+    In Spring Framework, ParameterizedTypeReference<T> is a utility class used when you need to work with generic types in certain operations, such as making HTTP requests with RestTemplate or WebClient. It helps resolve issues where Java's type erasure causes problems with retaining generic type information at runtime.
+
+    Java's type erasure removes generic type information at runtime, which makes it difficult for Spring to determine the exact type of a generic collection. ParameterizedTypeReference<T> is a way to explicitly provide this type information so that Spring can deserialize responses into the appropriate types.
+
+    In simple terms, it is used when you need to pass or capture generic types, such as a List<MyClass> or Map<String, Object>, which would otherwise lose type information due to Java's type erasure.
+
+    Usage in RestTemplate Example:
+        Let's say you want to make an API call to get a list of MyClass objects. Normally, due to type erasure, you would not be able to directly get List<MyClass> from RestTemplate without casting or using a helper class. ParameterizedTypeReference solves this.
+
+    Example without ParameterizedTypeReference (loses generic info):
+        RestTemplate restTemplate = new RestTemplate();
+        List<MyClass> result = restTemplate.getForObject("http://example.com/api/data", List.class);
+        // This would not work as expected because it loses the type information.
+
+    Example using ParameterizedTypeReference:
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<List<MyClass>> response = restTemplate.exchange(
+                "http://example.com/api/data",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<MyClass>>() {}
+        );
+        List<MyClass> result = response.getBody();
 */
 
 package org.example.productService.services;
 
 import org.example.productService.dtos.fakestore.FakeStoreCreateProductRequestDto;
 import org.example.productService.dtos.fakestore.FakeStoreGetProductResponseDto;
+import org.example.productService.exception.ProductNotFoundException;
 import org.example.productService.models.Product;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -60,7 +86,7 @@ public class ProductServiceFakeStoreImpl implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
-         // [Important] List<FakeStoreCreateProductResponseDto> will not work due to Type Erasure in Java (Generics are removed and replaced with Object during compilation) but Array works here
+         // [Important] List<FakeStoreCreateProductResponseDto> will not work due to Type Erasure in Java (Generics are removed and replaced with Object during compilation) but Array/ParameterizedTypeReference will work here
         // 3rd Party API call (using DTO)
         FakeStoreGetProductResponseDto[] response = restTemplate.getForObject(
                 "https://fakestoreapi.com/products",
@@ -101,5 +127,24 @@ public class ProductServiceFakeStoreImpl implements ProductService {
                 .block(); // Blocking for simplicity (Sync call)
 
         return response.toProduct();
+    }
+
+    @Override
+    public Product getProductById(Long productId) throws ProductNotFoundException {
+        ResponseEntity<FakeStoreGetProductResponseDto> fakeStoreProductResponse = restTemplate.getForEntity(
+                "https://fakestoreapi.com/products/" + productId,
+                FakeStoreGetProductResponseDto.class
+        );
+
+//        if (fakeStoreProductResponse.getStatusCode() != HttpStatusCode.valueOf(200)) {}
+//        fakeStoreProductResponse.getHeaders().
+
+        FakeStoreGetProductResponseDto fakeStoreProduct = fakeStoreProductResponse.getBody();
+
+        if (fakeStoreProduct == null) {
+            throw new ProductNotFoundException("Product with id: " + productId + " doesn't exist. Retry some other product.");
+        }
+
+        return fakeStoreProduct.toProduct();
     }
 }

@@ -16,6 +16,7 @@ public class ApplicationConfiguration {
 
     @Bean
     @LoadBalanced
+    // Comment this line if you want to disable load balancing for the RestTemplate and Fakestore API calls will only work if you comment this
     public RestTemplate createRestTemplate() {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
 

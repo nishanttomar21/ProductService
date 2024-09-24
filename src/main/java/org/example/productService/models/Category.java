@@ -20,6 +20,8 @@
 //      FetchMode.JOIN - It fetches the related entities using a JOIN query. It is the default fetch mode for @OneToOne and @ManyToOne relationships. It means that when you load an entity, the collection is loaded along with it. It is loaded even if you do not access it.
 // FetchMode.SELECT is more efficient than FetchMode.JOIN as it loads the related entities using a separate SELECT query only when they are needed. However, FetchMode.SELECT can lead to N+1 query issues if the related entities are accessed in a loop. FetchMode.JOIN fetches all the related entities using a JOIN query even if they are not needed. It is recommended to use FetchMode.SELECT for @OneToMany and @ManyToMany relationships to avoid N+1 query issues.
 // FetchType.LAZY and FetchMode.SELECT are used together to fetch the related entities lazily using a separate SELECT query only when they are needed. FetchType.EAGER and FetchMode.JOIN are used together to fetch the related entities eagerly using a JOIN query even if they are not needed.
+// @OneToMany and @ManyToMany: FetchType.LAZY by default
+// @OneToOne and @ManyToOne: FetchType.EAGER by default
 
 package org.example.productService.models;
 

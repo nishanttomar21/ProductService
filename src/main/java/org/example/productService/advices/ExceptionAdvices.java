@@ -22,7 +22,7 @@ public class ExceptionAdvices {
         return dto;
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)  // This method is used to handle all the exceptions
     public String handleException() {   // This method is used to handle all the exceptions
         return "something went wrong";
     }

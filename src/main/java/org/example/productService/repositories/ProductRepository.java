@@ -9,6 +9,25 @@
 //      2. @Query Annotation - Define the query using JPQL (Java Persistence Query Language) in the repository interface. Example: @Query("SELECT c FROM Category c WHERE c.name = :name") - This method will find the entity by its name. You are writing the query in object-oriented way using java objects.
 //      3. Native Query - Define the query using native SQL in the repository interface. Example: @Query(value = "SELECT * FROM categories WHERE name = :name", nativeQuery = true) - This method will find the entity by its name. SQL query directly runs on the database.
 // When your system/codebase start to become large/complex, then companies generally start to transition from ORM to directly writing Native queries. ORM is good for small projects because it is easy to use and understand. It is also good for rapid development. But for large projects, ORM can be slow and inefficient. Native queries are faster and more efficient for large projects.
+// Projections - It refers to a technique used with Spring Data JPA to efficiently retrieve partial data from database entities. Instead of fetching entire entities, projections allow you to select only specific fields, reducing the amount of data transferred and potentially improving performance.
+/**
+ The '?1' notation in a JPQL query is used to specify a positional parameter. It acts as a placeholder for a value that will be provided when the query is executed.
+ When using positional parameters in a JPQL query defined with the @Query annotation in a Spring Data JPA repository, the parameters are mapped to the method parameters based on their position:
+     The first method parameter corresponds to ?1
+     The second method parameter corresponds to ?2
+     And so on...
+
+ For example:
+     @Query("SELECT e FROM Employee e WHERE e.department.name = ?1")
+     List<Employee> findByDepartmentName(String departmentName);
+
+ In this case, the value of the departmentName parameter will be bound to the ?1 placeholder in the JPQL query when the findByDepartmentName method is called.
+
+     The main advantages of using positional parameters are:
+         Simplicity: You don't need to specify a parameter name, just the position.
+         Automatic mapping: Spring Data JPA automatically maps the method parameters to the positional parameters based on their order.
+         However, positional parameters can become harder to manage if the query has many parameters and the order matters. In such cases, named parameters may be more readable and maintainable.
+*/
 
 package org.example.productService.repositories;
 
@@ -43,6 +62,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Override
     Optional<Product> findById(Long id);
+
+    Product findByIdIs(Long id);
 
     Optional<List<Product>> findAllByTitleContaining(String title); // Find all products by title containing a given string
 

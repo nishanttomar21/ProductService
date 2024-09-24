@@ -135,4 +135,12 @@ Prototype scope: You can change this behavior by explicitly specifying a differe
  Configuration class: The class containing the @Bean method should be annotated with @Configuration to ensure proper behavior.
  Method invocation: If a @Bean method is called directly from another @Bean method in the same configuration class, it doesn't create a new instance but returns the existing singleton instance.
 
+ E. TODO [@Transactional]
+     "@Transactional" refers to a declarative way to manage transactions within your application. It is used to ensure that a series of operations within a method are executed within the context of a database transaction, where either all of the operations complete successfully, or none of them are applied (rollback). This is particularly important for maintaining data integrity in case of failures.
+
+     Basic Concept:
+         1. Atomicity: If any operation within a transaction fails, all other changes are rolled back, ensuring data consistency.
+         2. Isolation: Controls how transactional changes made by one method are visible to others.
+         3. Propagation: Defines how transactions behave when they are called within other transactions.
+         4. Rollback: Defines conditions under which a transaction should be rolled back.
  **/

@@ -4,6 +4,7 @@
 // Getter and Setter - Lombok annotations used to automatically generate getter and setter methods for the fields of the entity.
 // @NoArgsConstructor - When you apply this annotation to a class, Lombok automatically generates a no-argument constructor for that class during compilation.
 // @AllArgsConstructor - When you apply this annotation to a class, Lombok automatically generates a constructor that includes all fields of the class as parameters during compilation.
+// @JoinColumn - It is used to specify the foreign key column that will be used to join two entities in a relationship. It is typically applied in associations such as @ManyToOne, @OneToOne, and @OneToMany.
 
 package org.example.productService.models;
 
