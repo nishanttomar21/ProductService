@@ -129,11 +129,11 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetProductDto> getSingleProduct(@PathVariable("id") Long productId) {
+    public ResponseEntity<GetProductDto> getSingleProduct(@PathVariable("id") Long productId) throws ProductNotFoundException {
         try {
             if (productId < 0)
                 throw new RuntimeException("Product not found");
-            else if(productId == 0)
+            else if(productId == 0)      // Extra else-if added for testing purpose onlu
                 throw new RuntimeException("Something very bad");
 
             Product product = productService.getProductById(productId);
