@@ -12,8 +12,14 @@ import java.util.List;
 public interface ProductService {
 
     Product createProduct(Product product);
+
     List<Product> getAllProducts();
+
     Product partialUpdateProduct(Long productId, Product product) throws ProductNotFoundException;
+
     Product getProductById(Long id) throws ProductNotFoundException;
+
     Product replaceProduct(Long id, Product product);
+
+    void deleteProduct(Long id);
 }

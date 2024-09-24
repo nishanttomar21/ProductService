@@ -156,6 +156,10 @@ public class ProductServiceFakeStoreImpl implements ProductService {
         return fakeStoreProduct.toProduct();
     }
 
+    // TODO
+    @Override
+    public void deleteProduct(Long id) {}
+
     // For PUT requests, you should use the put() method of RestTemplate. If you need to get a response object from a PUT request, you can use the exchange() method with HttpMethod.PUT.
     public Product replaceProduct(Long id, Product product) {
         FakeStoreCreateProductRequestDto fakeStoreProductDto = FakeStoreCreateProductRequestDto.fromProduct(product);

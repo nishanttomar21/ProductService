@@ -10,6 +10,35 @@
 //      3. Native Query - Define the query using native SQL in the repository interface. Example: @Query(value = "SELECT * FROM categories WHERE name = :name", nativeQuery = true) - This method will find the entity by its name. SQL query directly runs on the database.
 // When your system/codebase start to become large/complex, then companies generally start to transition from ORM to directly writing Native queries. ORM is good for small projects because it is easy to use and understand. It is also good for rapid development. But for large projects, ORM can be slow and inefficient. Native queries are faster and more efficient for large projects.
 // Projections - It refers to a technique used with Spring Data JPA to efficiently retrieve partial data from database entities. Instead of fetching entire entities, projections allow you to select only specific fields, reducing the amount of data transferred and potentially improving performance.
+// HQL vs SQL
+// 	1. Database Independence:
+//      	HQL: Database-independent
+//		SQL: Database-specific
+//	2. Query Target:
+//		HQL: Operates on Java objects and properties
+//		SQL: Operates on database tables and columns
+//	3. Syntax:
+//		HQL: Similar to SQL but object-oriented
+//		SQL: Standard relational database syntax
+//	4. Joins:
+//		HQL: Can use implicit joins via object associations
+//		SQL: Requires explicit join statements
+//	5. Portability:
+//		HQL: More portable across different databases
+//		SQL: May require adjustments when changing databases
+//	6. Performance:
+//		HQL: May have overhead due to object-relational mapping
+//		SQL: Generally offers better performance for complex queries
+//	7. Learning Curve:
+//      	HQL: Easier for developers familiar with object-oriented concepts
+//      	SQL: Standard knowledge for most database developers
+//	8. Caching:
+//      	HQL: Supports Hibernate's built-in caching mechanisms
+//      	SQL: Caching depends on database-specific features
+// 	9. Flexibility:
+//     		HQL: Limited to features supported by Hibernate
+//      	SQL: Offers full range of database-specific features
+
 /**
  The '?1' notation in a JPQL query is used to specify a positional parameter. It acts as a placeholder for a value that will be provided when the query is executed.
  When using positional parameters in a JPQL query defined with the @Query annotation in a Spring Data JPA repository, the parameters are mapped to the method parameters based on their position:
@@ -32,6 +61,7 @@
 package org.example.productService.repositories;
 
 import org.example.productService.models.Product;
+import org.example.productService.repositories.projections.ProductWithIdAndTitle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -82,7 +112,23 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "WHERE p.category.subcategory.name = :subcategoryName")  // subcategoryName is a variable (named parameter) that will be replaced by the value passed in the method
     List<Product> JPQLFunction2(@Param("subcategoryName") String subcategoryName);
 
+    // select * from products where title like '%iphone%'
+    List<Product> findProductByTitleLike(String word); // case sensitive
+
+    List<Product> findByTitleLikeIgnoreCase(String word); // case insensitive.
+
+    // select * from products where title like '' LIMIT 5
+    List<Product> findTop5ByTitleContains(String word);
+
     // 3. Native Query - SQL (Warning: Don't use SQL queries unless you have to as it can lead to SQL injection attacks)
     @Query(value = CustomQueries.GET_PRODUCTS_WITH_SUBCATEGORY_NAME, nativeQuery = true)  // nativeQuery = true tells Spring that this is a native SQL query
     List<Product> nativeQueryFunction();
+
+    // HQL (Hibernate Query Language)
+    @Query("select p.id as id, p.title as title from Product p where p.id = :x")
+    List<ProductWithIdAndTitle> randomSearchMethod(Long x);     // Projection: ProductWithIdAndTitle
+
+    // SQL
+    @Query(value = "select p.id as id, p.title as title from product p where p.id = :productId", nativeQuery = true)
+    List<ProductWithIdAndTitle> randomSearchMethod2(Long productId);
 }

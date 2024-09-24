@@ -107,8 +107,14 @@ public class ProductServiceDBImpl implements ProductService {
         return productRepository.findByIdIs(productId);
     }
 
+    // TODO
     @Override
     public Product replaceProduct(Long id, Product product) {
         return null;
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
     }
 }

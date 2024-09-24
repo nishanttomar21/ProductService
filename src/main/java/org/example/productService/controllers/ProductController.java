@@ -128,21 +128,6 @@ public class ProductController {
         return response;
     }
 
-    @PatchMapping("/{id}")
-    public PatchProductResponseDto updateProduct(@PathVariable("id") Long productId, @RequestBody CreateProductDto productDto) throws ProductNotFoundException {
-        // DTO --> Model (Data conversion)
-        Product productRequest = productDto.toProduct();
-
-        // Service called (using Model data)
-        Product product = productService.partialUpdateProduct(productId, productRequest);
-
-        // Model --> DTO (Data conversion)
-        PatchProductResponseDto response = new PatchProductResponseDto();
-        response.setProduct(GetProductDto.fromProduct(product));
-
-        return response;
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<GetProductDto> getSingleProduct(@PathVariable("id") Long productId) {
         try {
@@ -173,9 +158,24 @@ public class ProductController {
         return GetProductDto.fromProduct(product);
     }
 
+    @PatchMapping("/{id}")
+    public PatchProductResponseDto updateProduct(@PathVariable("id") Long productId, @RequestBody CreateProductDto productDto) throws ProductNotFoundException {
+        // DTO --> Model (Data conversion)
+        Product productRequest = productDto.toProduct();
+
+        // Service called (using Model data)
+        Product product = productService.partialUpdateProduct(productId, productRequest);
+
+        // Model --> DTO (Data conversion)
+        PatchProductResponseDto response = new PatchProductResponseDto();
+        response.setProduct(GetProductDto.fromProduct(product));
+
+        return response;
+    }
+
     @DeleteMapping("/{id}")
-    public String deleteProduct(@PathVariable("id") String id) {
-        return "Product deleted: " + id;
+    public void deleteProduct(@PathVariable("id") Long productId) {
+        productService.deleteProduct(productId);
     }
 
     @RequestMapping(name = "NISHANT", value = "/")      // Custom HTTP Request
