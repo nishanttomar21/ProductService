@@ -43,7 +43,6 @@ import org.example.productService.exception.ProductNotFoundException;
 import org.example.productService.models.Product;
 import org.example.productService.services.ProductService;
 import org.example.productService.services.ProductServiceDBImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -73,10 +72,10 @@ public class ProductController {
     }
 
     // Setter/Method Injection
-    @Autowired
-    public void setProductServiceDBImpl(ProductServiceDBImpl productServiceDBImpl) {
-        this.productServiceDBImpl = productServiceDBImpl;
-    }
+//    @Autowired
+//    public void setProductServiceDBImpl(ProductServiceDBImpl productServiceDBImpl) {
+//        this.productServiceDBImpl = productServiceDBImpl;
+//    }
 
     // HTTP Requests
     @PostMapping("")

@@ -5,9 +5,11 @@
 // @NoArgsConstructor - When you apply this annotation to a class, Lombok automatically generates a no-argument constructor for that class during compilation.
 // @AllArgsConstructor - When you apply this annotation to a class, Lombok automatically generates a constructor that includes all fields of the class as parameters during compilation.
 // @JoinColumn - It is used to specify the foreign key column that will be used to join two entities in a relationship. It is typically applied in associations such as @ManyToOne, @OneToOne, and @OneToMany.
+// @JsonInclude - It is used to specify how to include or exclude fields from the JSON response.
 
 package org.example.productService.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -15,6 +17,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)  // To exclude null values from the JSON response
 @Entity
 public class Product extends BaseModel {
     private String title;

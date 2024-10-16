@@ -21,4 +21,9 @@ public class ApplicationConfiguration {
         // return new RestTemplate();
         return new RestTemplate(factory);
     }
+
+//    @Bean
+//    public RestTemplate restTemplate() {
+//        return new RestTemplate();
+//    }
 }
