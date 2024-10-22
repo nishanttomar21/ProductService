@@ -9,8 +9,7 @@
     Additional Functionality: Can encapsulate common logic or methods that multiple entities might need.
 
     MappedSuperclass - So that classes that implements this class (Child Classes) will be able to use its attributes and methods.
-
-    [Important] Don't create a table fot Base Model class in the database. It's just a common class to be extended by other classes.
+    [Important] Don't create a table for Base Model class in the database. It's just a common class to be extended by other classes. The superclass itself is not mapped to a database table. Only its subclasses are mapped to tables.
 
     GenerationType - Defines the strategy to generate primary keys. There are four types of generation strategies:
         GenerationType.AUTO - The persistence provider will choose the appropriate strategy for the underlying database. This is the default strategy. This creates tableName_seq in the database.
