@@ -142,13 +142,13 @@ public class ProductServiceFakeStoreImpl implements ProductService {
 
     @Override
     public Product getProductById(Long productId) throws ProductNotFoundException {
-//        // Try to fetch the product from Redis.
-//        Product product = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_" + productId);     // Category/Table: "PRODUCTS", Hash Key: "PRODUCT_123"
-//
-//        // Cache HIT
-//        if (product != null) {
-//            return product;
-//        }
+        // Try to fetch the product from Redis.
+        Product product = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_" + productId);     // Category/Table: "PRODUCTS", Hash Key: "PRODUCT_123"
+
+        // Cache HIT
+        if (product != null) {
+            return product;
+        }
 
         // Fetch the product from the 3rd party API and store it in Redis for future requests
         ResponseEntity<FakeStoreGetProductResponseDto> fakeStoreProductResponse = restTemplate.getForEntity(
@@ -158,17 +158,17 @@ public class ProductServiceFakeStoreImpl implements ProductService {
 
         FakeStoreGetProductResponseDto fakeStoreProductDto = fakeStoreProductResponse.getBody();
 
-        if (fakeStoreProductDto == null) {
+        // Cache MISS
+        product = fakeStoreProductDto.toProduct();
+
+        // Store the product in Redis.
+        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + productId, product);
+
+        if (product == null) {
             throw new ProductNotFoundException("Product with id: " + productId + " doesn't exist. Retry some other product.");
         }
 
-//        // Cache MISS
-//        product = fakeStoreProductDto.toProduct();
-//
-//        // Store the product in Redis.
-//        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + productId, product);
-
-        return fakeStoreProductDto.toProduct();
+        return product;
     }
 
     // TODO
