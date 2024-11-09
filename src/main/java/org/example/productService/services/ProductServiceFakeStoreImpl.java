@@ -46,6 +46,7 @@ import org.example.productService.exception.ProductNotFoundException;
 import org.example.productService.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -66,11 +67,13 @@ import java.util.stream.Stream;
 public class ProductServiceFakeStoreImpl implements ProductService {
     private final WebClient webClient;
     private final RestTemplate restTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     // Error (IMPORTANT): Could not autowire. No beans of 'RestTemplate' or 'WebClient' types found, hence manually create a bean of RestTemplate in the configuration class
-    public ProductServiceFakeStoreImpl(WebClient.Builder webClientBuilder, RestTemplate restTemplate) {
+    public ProductServiceFakeStoreImpl(WebClient.Builder webClientBuilder, RestTemplate restTemplate, RedisTemplate redisTemplate) {
         this.webClient = webClientBuilder.baseUrl("https://fakestoreapi.com").build();
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -139,21 +142,33 @@ public class ProductServiceFakeStoreImpl implements ProductService {
 
     @Override
     public Product getProductById(Long productId) throws ProductNotFoundException {
+//        // Try to fetch the product from Redis.
+//        Product product = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_" + productId);     // Category/Table: "PRODUCTS", Hash Key: "PRODUCT_123"
+//
+//        // Cache HIT
+//        if (product != null) {
+//            return product;
+//        }
+
+        // Fetch the product from the 3rd party API and store it in Redis for future requests
         ResponseEntity<FakeStoreGetProductResponseDto> fakeStoreProductResponse = restTemplate.getForEntity(
                 "https://fakestoreapi.com/products/" + productId,
                 FakeStoreGetProductResponseDto.class
         );
 
-//        if (fakeStoreProductResponse.getStatusCode() != HttpStatusCode.valueOf(200)) {}
-//        fakeStoreProductResponse.getHeaders().
+        FakeStoreGetProductResponseDto fakeStoreProductDto = fakeStoreProductResponse.getBody();
 
-        FakeStoreGetProductResponseDto fakeStoreProduct = fakeStoreProductResponse.getBody();
-
-        if (fakeStoreProduct == null) {
+        if (fakeStoreProductDto == null) {
             throw new ProductNotFoundException("Product with id: " + productId + " doesn't exist. Retry some other product.");
         }
 
-        return fakeStoreProduct.toProduct();
+//        // Cache MISS
+//        product = fakeStoreProductDto.toProduct();
+//
+//        // Store the product in Redis.
+//        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + productId, product);
+
+        return fakeStoreProductDto.toProduct();
     }
 
     // TODO
